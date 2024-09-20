@@ -157,10 +157,10 @@ async function handleSwipe() {
     if (swipeCount < maxSwipes) {
         if (swipeDistance > 50 && currentCardIndex > -2) {
             currentCardIndex--;
-            if (userInteracted) playSound(); // Play sound only if user has interacted
+            playSound(); // Play sound only if user has interacted
         } else if (swipeDistance < -50 && currentCardIndex < 4) {
             currentCardIndex++;
-            if (userInteracted) playSound(); // Play sound only if user has interacted
+            playSound(); // Play sound only if user has interacted
         }
 
         // Move camera to the correct card position

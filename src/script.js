@@ -7,7 +7,8 @@ let mraid = {
     open: function() {
         alert("Redirecting to the app store...");
         // In a real environment, this would use `mraid.open('https://your.appstore.link');`
-        window.location.href = "https://your.appstore.link";
+        mraid.open("https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271")
+        // window.location.href = "https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271";
     }
 };
 
@@ -260,8 +261,8 @@ let animate = function () {
 
         } else {
             gsap.to(card.material.uniforms.uStep, {value:  0.25, duration: 0.5, ease: 'power1'});
-            gsap.to(card.position, {z:  0, duration: 0.5, ease: 'power1.out'});
-            // card.position.z = 0
+            // gsap.to(card.position, {z:  0, duration: 0.5, ease: 'power1.out'});
+            card.position.z = 0
 
             card.material.uniforms.uFrequency.value = new THREE.Vector2(0, 0)
             card.material.uniforms.uTime.value = 0

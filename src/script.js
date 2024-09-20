@@ -7,8 +7,8 @@ let mraid = {
     open: function() {
         alert("Redirecting to the app store...");
         // In a real environment, this would use `mraid.open('https://your.appstore.link');`
-        mraid.open("https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271")
-        // window.location.href = "https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271";
+        // mraid.open("https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271")
+        window.location.href = "https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271";
     }
 };
 

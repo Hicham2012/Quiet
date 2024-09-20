@@ -1,6 +1,5 @@
 
 import { cardFragmentShader, cardVertexShader } from "./shader/card"
-import convertWebPToBase64FromURL from "./utils/converter";
 
 export default class Card
 {
@@ -20,17 +19,11 @@ export default class Card
             vertexShader: cardVertexShader,
             fragmentShader: cardFragmentShader,
             transparent: true,
-            // wireframe: true
         })
         this.cardMesh = new THREE.Mesh(this.cardGeometry, this.cardMaterial)
 
         
         
     }
-    
-    // init(path, uniform)
-    // {
-        
-        
-    // }
+
 }

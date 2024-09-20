@@ -14,6 +14,11 @@ void main() {
 
     texture *= vElevation * 2.0 + 0.85;
 
+    if(uStep == 1.) {
+        noise /= 2.;
+    }
+
+    
 
     gl_FragColor = vec4(texture * smoothstep(noise, 1., uStep), 1.);
 }

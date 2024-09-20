@@ -1,6 +1,7 @@
 // import { Clock } from "three";
 import Card from "./Card.js";
 import gsap from "gsap";
+import loadImage from "./utils/loaders.js";
 
 // Simulate MRAID open function
 let mraid = {
@@ -11,6 +12,8 @@ let mraid = {
         window.location.href = "https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271";
     }
 };
+
+
 
 let gl = null; // Variable to store WebGL context
 let webGLAvailable = false; // Flag to check if WebGL is available
@@ -40,17 +43,22 @@ let webGLCheckInterval = setInterval(checkWebGL, retryInterval);
 // Initial check
 checkWebGL();
 
+
 // Set up Three.js Scene
 let scene = new THREE.Scene();
+scene.background = new THREE.Color('#4078FE')
+
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+const canvas = document.querySelector('canvas.webgl');
 let renderer = new THREE.WebGLRenderer({
-    canvas:  document.querySelector('canvas.webgl'),
+    canvas:  canvas,
     antialias: true,
-    powerPreference: "high-performance"
+    powerPreference: "high-performance",
+    // transparent: true
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-renderer.background = 'red'
 // document.getElementById('container').appendChild(renderer.domElement);
 
 const img_1 = document.querySelector('img.image-1')
@@ -59,17 +67,7 @@ const img_3 = document.querySelector('img.image-3')
 // console.log(img_1.src)
 // Example usage
 
-function loadImage(pic, obj)
-{
-    const image = new Image()
-    image.src = pic
-    image.onload = function() {
-        const texture = new THREE.Texture(image);
-        texture.needsUpdate = true;
 
-        obj.material.uniforms.uMap.value = texture
-    }
-}
 
 let card1 = new Card(null).cardMesh;
 loadImage(img_1.src, card1)
@@ -136,9 +134,9 @@ function enableSound() {
 // Wait for the first user interaction (works for mobile and desktop)
 function waitForUserInteraction() {
     // Detect the first touch or click on the document
-    document.addEventListener('touchstart', enableSound, { once: true });
-    document.addEventListener('click', enableSound, { once: true });
-    document.addEventListener('pointermove', enableSound, { once: true });
+    canvas.addEventListener('touchstart', enableSound, { once: true });
+    canvas.addEventListener('click', enableSound, { once: true });
+    canvas.addEventListener('pointermove', enableSound, { once: true });
 }
 
 // Play sound if the user has interacted
@@ -253,7 +251,7 @@ let animate = function () {
         if (intersects.find(intersect => intersect.object === card)) {
             // card.material.uniforms.uStep.value = 1;  // Change to red if intersected
             gsap.to(card.material.uniforms.uStep, {value:  1, duration: 0.5, ease: 'power1'});
-            gsap.to(card.position, {z:  1, duration: 0.5, ease: 'power1.in'});
+            gsap.to(card.position, {z:  1, duration: 0.25, ease: 'power1.in'});
             // card.position.z = 1
 
             card.material.uniforms.uFrequency.value = new THREE.Vector2(5, 1)

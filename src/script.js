@@ -119,6 +119,8 @@ let maxSwipes = 3;
 let touchStartX = 0;
 let touchEndX = 0;
 let currentCardIndex = 1;  // Start at the center card (card 2)
+let previousPosition = 0;
+let currentPosition = 0;
 
 const source = document.querySelector('audio.audio')
 console.info('audio', source)
@@ -165,15 +167,19 @@ async function handleSwipe() {
 
         // Move camera to the correct card position
         // camera.position.x = (currentCardIndex - 1) * 5;
+        previousPosition = camera.position.x
         gsap.to(camera.position, {
-            x: (currentCardIndex - 1) * 5,
-            onComplete: function() {
-                source.currentTime = 0; // Rewind sound to the beginning
-                source.volume = 0.25 + Math.random() * 0.25
-                source.play(); // Await the sound to play (returns a promise)
-            }
+            x: (currentCardIndex - 1) * 5
         })  // -1 for card1, 0 for card2, +1 for card3
-        swipeCount++;
+        currentPosition = (currentCardIndex - 1) * 5
+
+        if(currentPosition !== previousPosition) {
+            swipeCount++
+            // source.currentTime = 0; // Rewind sound to the beginning
+            // source.volume = 0.25 + Math.random() * 0.25
+            // source.play();
+            playSound()
+        };
     }
 
     if (swipeCount >= maxSwipes) {
@@ -198,7 +204,14 @@ document.addEventListener('touchend', function (event) {
 function showEndCard() {
     document.getElementById('endCard').style.display = 'flex';
     userInteracted = false
-    sound.play = false
+    gsap.to(".download", {
+        scale: 1.25,
+        duration: 1.,
+        ease: "bounce.in",
+        yoyo: true,
+        repeat: -1
+    })
+    // sound.play = false
 }
 
 // CTA Button action

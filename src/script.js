@@ -1,25 +1,25 @@
-// import { Clock } from "three";
 import Card from "./Card.js";
 import gsap from "gsap";
 import loadImage from "./utils/loaders.js";
+import { img_1, img_2, img_3 } from "./assets/images.js";
+import { audio } from "./assets/audio.js";
 
 // Simulate MRAID open function
 let mraid = {
     open: function() {
         alert("Redirecting to the app store...");
-        // In a real environment, this would use `mraid.open('https://your.appstore.link');`
-        // mraid.open("https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271")
         window.location.href = "https://apps.apple.com/us/app/clean-manager-storage-cleaner/id1579881271";
     }
 };
 
 
-
+/**
+ * Check Webgl availability
+ */
 let gl = null; // Variable to store WebGL context
 let webGLAvailable = false; // Flag to check if WebGL is available
 const retryInterval = 5000; // Time in milliseconds to retry WebGL availability check
 
-// Function to check if WebGL is available
 function checkWebGL() {
     try {
         const canvas = document.createElement('canvas');
@@ -43,32 +43,25 @@ let webGLCheckInterval = setInterval(checkWebGL, retryInterval);
 // Initial check
 checkWebGL();
 
-
-// Set up Three.js Scene
+// Scene
 let scene = new THREE.Scene();
 scene.background = new THREE.Color('#4078FE')
 
+// Camera
 let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.z = 7;
 
+// Render
 const canvas = document.querySelector('canvas.webgl');
 let renderer = new THREE.WebGLRenderer({
     canvas:  canvas,
     antialias: true,
     powerPreference: "high-performance",
-    // transparent: true
 });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-// document.getElementById('container').appendChild(renderer.domElement);
 
-const img_1 = document.querySelector('img.image-1')
-const img_2 = document.querySelector('img.image-2')
-const img_3 = document.querySelector('img.image-3')
-// console.log(img_1.src)
-// Example usage
-
-
-
+// Cards
 let card1 = new Card(null).cardMesh;
 loadImage(img_1.src, card1)
 
@@ -99,38 +92,29 @@ card5.position.x = 10;  // Center card
 card6.position.x = -15
 card7.position.x = 15;  // Right card
 
-
-
 const cardsGroup = new THREE.Group();
-
-// Add cards to the scene
 cardsGroup.add(card1, card2, card3, card4, card5, card6, card7);
 
+// Add them to the array for raycasting
+let cards = []
+cardsGroup.children.forEach(child => {
+    cards.push(child)
+});
+
+// Add cards to the scene
 scene.add(cardsGroup)
 
-// scene.add(card2);
-// scene.add(card3);
-
-camera.position.z = 7;  // Adjust camera to be farther away
-
-// Swipe mechanics
-let swipeCount = 0;
-let maxSwipes = 3;
-let touchStartX = 0;
-let touchEndX = 0;
-let currentCardIndex = 1;  // Start at the center card (card 2)
-let previousPosition = 0;
-let currentPosition = 0;
-
-const source = document.querySelector('audio.audio')
-console.info('audio', source)
-let sound = new Audio(source.currentSrc);
+/**
+ * Sound Management
+ */
+console.info('audio', audio)
+let sound = new Audio(audio.currentSrc);
 let userInteracted = false;
 
 // Enable sound once the user interacts with the document (for mobile and desktop)
 function enableSound() {
     userInteracted = true;
-    console.log('User interaction detected, sound can now play.');
+    console.log('User interaction detected!');
 }
 
 // Wait for the first user interaction (works for mobile and desktop)
@@ -148,10 +132,18 @@ function playSound() {
     sound.currentTime = 0; // Rewind sound to the beginning
     sound.volume = 0.25 + Math.random() * 0.25
     sound.play(); // Await the sound to play (returns a promise)
-    // console.log(sound.volume);
-
 }
 
+/**
+ * Swipe mechanics
+ */
+let swipeCount = 0;
+let maxSwipes = 3;
+let touchStartX = 0;
+let touchEndX = 0;
+let currentCardIndex = 1;  // Start at the center card
+let previousPosition = 0;
+let currentPosition = 0;
 // Example swipe handling logic with sound playback
 async function handleSwipe() {
     let swipeDistance = touchEndX - touchStartX;
@@ -159,31 +151,23 @@ async function handleSwipe() {
     if (swipeCount < maxSwipes) {
         if (swipeDistance > 50 && currentCardIndex > -2) {
             currentCardIndex--;
-            // if (userInteracted) playSound(); // Play sound only if user has interacted
         } else if (swipeDistance < -50 && currentCardIndex < 4) {
             currentCardIndex++;
-            // if (userInteracted) playSound(); // Play sound only if user has interacted
         }
 
-        // Move camera to the correct card position
-        // camera.position.x = (currentCardIndex - 1) * 5;
         previousPosition = camera.position.x
         gsap.to(camera.position, {
             x: (currentCardIndex - 1) * 5
-        })  // -1 for card1, 0 for card2, +1 for card3
+        })
         currentPosition = (currentCardIndex - 1) * 5
 
         if(currentPosition !== previousPosition) {
             swipeCount++
-            // source.currentTime = 0; // Rewind sound to the beginning
-            // source.volume = 0.25 + Math.random() * 0.25
-            // source.play();
             playSound()
         };
     }
 
     if (swipeCount >= maxSwipes) {
-        
         showEndCard();
     }
 }
@@ -211,7 +195,6 @@ function showEndCard() {
         yoyo: true,
         repeat: -1
     })
-    // sound.play = false
 }
 
 // CTA Button action
@@ -245,22 +228,15 @@ let points = [
 let lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
 let line = new THREE.Line(lineGeometry, lineMaterial);
 scene.add(line);
-console.log(line)
 line.material.visible = false
 
-let cards = [card1, card2, card3, card4, card5, card6, card7]
-// Detect intersection using Raycaster
-
-
-// Simulate the pointer being at the center (0, 0) of the screen (center of the camera view)
+// Make pointer at the center of the screen
 pointer.x = 0;
 pointer.y = 0;
 
-// Check for intersections every second
-// setInterval(, 1000);
-
-
-// Render Loop
+/**
+ * Animation
+ */
 const clock = new THREE.Clock()
 let animate = function () {
 
@@ -277,20 +253,17 @@ let animate = function () {
                 duration: 0.25,
                 ease: 'power1.in'
             });
-            // card.position.z = 1
 
             card.material.uniforms.uFrequency.value = new THREE.Vector2(5, 1)
             card.material.uniforms.uTime.value = elapsedTime
 
         } else {
             gsap.to(card.material.uniforms.uStep, {value:  0.25, duration: 1.25, ease: 'power1'});
-            // gsap.to(card.position, {z:  0, duration: 0.5, ease: 'power1.out'});
             card.position.z = 0
 
             card.material.uniforms.uFrequency.value = new THREE.Vector2(0, 0)
            
             gsap.to(card.material.uniforms.uTime, {value:  0, duration: 0.25, ease: 'power1'});
-            // card.material.uniforms.uTime.value = 0
         }
     });
 

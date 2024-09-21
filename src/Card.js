@@ -1,4 +1,3 @@
-
 import { cardFragmentShader, cardVertexShader } from "./shader/card"
 
 export default class Card
@@ -6,7 +5,6 @@ export default class Card
     constructor(path)
     {
 
-        
         this.texture = new THREE.Texture(path);
         this.cardGeometry = new THREE.PlaneGeometry(3, 5, 50, 50)
         this.cardMaterial = new THREE.ShaderMaterial({
@@ -21,9 +19,6 @@ export default class Card
             transparent: true,
         })
         this.cardMesh = new THREE.Mesh(this.cardGeometry, this.cardMaterial)
-
-        
-        
     }
 
 }

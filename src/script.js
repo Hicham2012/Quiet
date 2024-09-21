@@ -164,7 +164,15 @@ async function handleSwipe() {
         }
 
         // Move camera to the correct card position
-        camera.position.x = (currentCardIndex - 1) * 5;  // -1 for card1, 0 for card2, +1 for card3
+        // camera.position.x = (currentCardIndex - 1) * 5;
+        gsap.to(camera.position, {
+            x: (currentCardIndex - 1) * 5,
+            onComplete: function() {
+                source.currentTime = 0; // Rewind sound to the beginning
+                source.volume = 0.25 + Math.random() * 0.25
+                source.play(); // Await the sound to play (returns a promise)
+            }
+        })  // -1 for card1, 0 for card2, +1 for card3
         swipeCount++;
     }
 
@@ -254,8 +262,7 @@ let animate = function () {
             gsap.to(card.position, {
                 z:  1,
                 duration: 0.25,
-                ease: 'power1.in',
-                onComplete: playSound()
+                ease: 'power1.in'
             });
             // card.position.z = 1
 

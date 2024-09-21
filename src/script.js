@@ -260,7 +260,7 @@ let animate = function () {
             // card.material.uniforms.uStep.value = 1;  // Change to red if intersected
             gsap.to(card.material.uniforms.uStep, {value:  1, duration: 0.5, ease: 'power1'});
             gsap.to(card.position, {
-                z:  1,
+                z:  1.5,
                 duration: 0.25,
                 ease: 'power1.in'
             });
@@ -270,16 +270,14 @@ let animate = function () {
             card.material.uniforms.uTime.value = elapsedTime
 
         } else {
-            gsap.to(card.material.uniforms.uStep, {value:  0.25, duration: 0.5, ease: 'power1'});
+            gsap.to(card.material.uniforms.uStep, {value:  0.25, duration: 1.25, ease: 'power1'});
             // gsap.to(card.position, {z:  0, duration: 0.5, ease: 'power1.out'});
-            gsap.to(card.position, {
-                z:  0,
-                duration: 0.05,
-                ease: 'power1.out'
-            });
+            card.position.z = 0
 
             card.material.uniforms.uFrequency.value = new THREE.Vector2(0, 0)
-            card.material.uniforms.uTime.value = 0
+           
+            gsap.to(card.material.uniforms.uTime, {value:  0, duration: 0.25, ease: 'power1'});
+            // card.material.uniforms.uTime.value = 0
         }
     });
 

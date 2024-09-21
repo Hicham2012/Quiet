@@ -272,7 +272,11 @@ let animate = function () {
         } else {
             gsap.to(card.material.uniforms.uStep, {value:  0.25, duration: 0.5, ease: 'power1'});
             // gsap.to(card.position, {z:  0, duration: 0.5, ease: 'power1.out'});
-            card.position.z = 0
+            gsap.to(card.position, {
+                z:  1,
+                duration: 0.05,
+                ease: 'power1.out'
+            });
 
             card.material.uniforms.uFrequency.value = new THREE.Vector2(0, 0)
             card.material.uniforms.uTime.value = 0

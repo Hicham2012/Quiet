@@ -273,7 +273,7 @@ let animate = function () {
             gsap.to(card.material.uniforms.uStep, {value:  0.25, duration: 0.5, ease: 'power1'});
             // gsap.to(card.position, {z:  0, duration: 0.5, ease: 'power1.out'});
             gsap.to(card.position, {
-                z:  1,
+                z:  0,
                 duration: 0.05,
                 ease: 'power1.out'
             });

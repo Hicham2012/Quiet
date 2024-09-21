@@ -141,7 +141,7 @@ function waitForUserInteraction() {
 
 // Play sound if the user has interacted
 function playSound() {
-    // if (!userInteracted) return; // Only proceed if user has interacted
+    if (!userInteracted) return; // Only proceed if user has interacted
 
     sound.currentTime = 0; // Rewind sound to the beginning
     sound.volume = 0.25 + Math.random() * 0.25
@@ -157,10 +157,10 @@ async function handleSwipe() {
     if (swipeCount < maxSwipes) {
         if (swipeDistance > 50 && currentCardIndex > -2) {
             currentCardIndex--;
-            playSound(); // Play sound only if user has interacted
+            // if (userInteracted) playSound(); // Play sound only if user has interacted
         } else if (swipeDistance < -50 && currentCardIndex < 4) {
             currentCardIndex++;
-            playSound(); // Play sound only if user has interacted
+            // if (userInteracted) playSound(); // Play sound only if user has interacted
         }
 
         // Move camera to the correct card position
@@ -251,7 +251,12 @@ let animate = function () {
         if (intersects.find(intersect => intersect.object === card)) {
             // card.material.uniforms.uStep.value = 1;  // Change to red if intersected
             gsap.to(card.material.uniforms.uStep, {value:  1, duration: 0.5, ease: 'power1'});
-            gsap.to(card.position, {z:  1, duration: 0.25, ease: 'power1.in'});
+            gsap.to(card.position, {
+                z:  1,
+                duration: 0.25,
+                ease: 'power1.in',
+                onComplete: playSound()
+            });
             // card.position.z = 1
 
             card.material.uniforms.uFrequency.value = new THREE.Vector2(5, 1)

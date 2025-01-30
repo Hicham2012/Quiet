@@ -22,7 +22,7 @@ Vite
 # Commands
 `npm run dev`
 
-`npm run build` (will return a single HTML file that has all the code in it)
+`npm run build` (will return a single HTML file that has all the code in it then pass it to AppLovin’s [requirements](https://p.applov.in/playablePreview?create=1&;qr=1)
 
 `npm run preview`
 

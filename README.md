@@ -1,5 +1,8 @@
 # Preview
-![Screenshot 2024-09-21 113532](https://github.com/user-attachments/assets/dae51a38-f1c0-4bbd-b429-dc12229206be)
+![Screenshot 2024-09-21 113532](https://github.com/user-attachments/assets/dae51a38-f1c0-4bbd-b429-dc12229206be
+
+# Describtion
+Playable Ad for mobile example compatible with AppLovin’s [requirements](https://p.applov.in/playablePreview?create=1&;qr=1).
 
 # Technologies used
 Node version: 16.20.1
